@@ -4,7 +4,7 @@ let contentWidth;
 let contentHeight;
 
 const media = navigator.mediaDevices
-  .getUserMedia({ audio: false, video: { width: 640, height: 480, facingMode: { exact: "environment" } } })
+  .getUserMedia({ audio: false, video: { width: 640, height: 480 } })
   .then((stream) => {
     video.srcObject = stream;
     video.onloadeddata = () => {
