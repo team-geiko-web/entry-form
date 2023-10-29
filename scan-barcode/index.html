@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/quagga/0.12.1/quagga.min.js"
+      integrity="sha512-bCsBoYoW6zE0aja5xcIyoCDPfT27+cGr7AOCqelttLVRGay6EKGQbR6wm6SUcUGOMGXJpj+jrIpMS6i80+kZPw=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    ></script>
+    <style>
+      body,
+      html {
+        margin: 0;
+        overflow: hidden;
+      }
+      #camera-view {
+        width: 100%;
+        height: auto;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="camera-view"></div>
+    <script>
+      Quagga.init(
+        {
+          locate: false,
+          frequency: 2,
+          inputStream: {
+            type: "LiveStream",
+            target: document.getElementById("camera-view"),
+            constraints: {
+              width: 1920,
+              height: 1080,
+              frameRate: 10,
+              tryVertical: true,
+              facingMode: "environment", // あれに変える
+              focusMode: "continuous",
+              successTimeout: 1000,
+            },
+            area: {
+              top: "20%",
+              right: "20%",
+              left: "20%",
+              bottom: "20%",
+            },
+          },
+          decoder: {
+            readers: ["ean_reader"],
+            multiple: false,
+          },
+        },
+        (error) => {
+          if (error) {
+            console.error(error);
+            return;
+          }
+
+          Quagga.start();
+        }
+      );
+
+      Quagga.onDetected(async (result) => {
+        if (!confirm("コードを登録しますか？")) {
+          console.log(result);
+          return;
+        }
+      });
+    </script>
+  </body>
+</html>
